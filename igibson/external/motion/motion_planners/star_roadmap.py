@@ -2,7 +2,7 @@
 Developed by Caelen Garrett in pybullet-planning repository (https://github.com/caelan/pybullet-planning)
 and adapted by iGibson team.
 """
-from collections import Mapping
+from collections.abc import Mapping
 
 #class StarRoadmap(Mapping, object):
 class StarRoadmap(Mapping, object):
