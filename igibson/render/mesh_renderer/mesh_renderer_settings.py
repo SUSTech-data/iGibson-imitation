@@ -28,7 +28,7 @@ class MeshRendererSettings(object):
         show_glfw_window=False,
         blend_highlight=False,
         is_robosuite=False,
-        glsl_version_override=460,
+        glsl_version_override=450,
         load_textures=True,
     ):
         """
