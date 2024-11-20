@@ -11,7 +11,7 @@ from distutils.version import LooseVersion
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
-use_clang = False
+use_clang = True
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -97,7 +97,7 @@ class CMakeBuild(build_ext):
             build_args += ["--", "/m"]
         else:
             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
-            build_args += ["--", "-j2"]
+            build_args += ["--", "-j8"]
 
         env = os.environ.copy()
         env["CXXFLAGS"] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get("CXXFLAGS", ""), self.distribution.get_version())
