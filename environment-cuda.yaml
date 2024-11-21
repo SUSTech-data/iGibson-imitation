@@ -1,0 +1,13 @@
+name: igcuda
+channels:
+  - conda-forge
+  - nvidia/label/cuda-12.4.0
+dependencies:
+  - cuda-toolkit
+  - libglvnd
+  - mesalib
+  - libegl
+  - libgles
+  - libglvnd-devel-conda-x86_64
+  - libegl-devel
+  - libgles-devel
