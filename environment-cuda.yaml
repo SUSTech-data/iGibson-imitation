@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - nvidia/label/cuda-12.4.0
 dependencies:
+  - python=3.10
   - cuda-toolkit
   - libglvnd
   - mesalib
