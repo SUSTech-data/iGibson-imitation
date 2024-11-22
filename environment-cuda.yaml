@@ -1,9 +1,11 @@
-name: igcuda
+name: ig-gpu
 channels:
   - conda-forge
   - nvidia/label/cuda-12.4.0
 dependencies:
   - python=3.10
+  - pip
+  - cmake
   - cuda-toolkit
   - libglvnd
   - mesalib
@@ -12,3 +14,10 @@ dependencies:
   - libglvnd-devel-conda-x86_64
   - libegl-devel
   - libgles-devel
+  - pip:
+    - pytest-cov
+    - av
+    - torch==2.5.0 -i https://download.pytorch.org/whl/cu124
+    - torchvision==0.20.0 -i https://download.pytorch.org/whl/cu124
+    - -r tests/requirements-tests.txt
+    - -e .

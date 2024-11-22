@@ -34,13 +34,14 @@ try:
             self.cuda_idx = get_cuda_device(self.device_minor)
             log.debug("Using cuda device {} for pytorch".format(self.cuda_idx))
             with torch.cuda.device(self.cuda_idx):
-                self.image_tensor = torch.cuda.ByteTensor(height, width, 4).cuda()
-                self.normal_tensor = torch.cuda.ByteTensor(height, width, 4).cuda()
-                self.seg_tensor = torch.cuda.FloatTensor(height, width, 4).cuda()
-                self.ins_seg_tensor = torch.cuda.FloatTensor(height, width, 4).cuda()
-                self.pc_tensor = torch.cuda.FloatTensor(height, width, 4).cuda()
-                self.optical_flow_tensor = torch.cuda.FloatTensor(height, width, 4).cuda()
-                self.scene_flow_tensor = torch.cuda.FloatTensor(height, width, 4).cuda()
+                self.image_tensor = torch.zeros((height, width, 4), dtype=torch.uint8).cuda()
+                self.normal_tensor = torch.zeros((height, width, 4), dtype=torch.uint8).cuda()
+                self.seg_tensor = torch.zeros((height, width, 4), dtype=torch.float32).cuda()
+                self.ins_seg_tensor = torch.zeros((height, width, 4), dtype=torch.float32).cuda()
+                self.pc_tensor = torch.zeros((height, width, 4), dtype=torch.float32).cuda()
+                self.optical_flow_tensor = torch.zeros((height, width, 4), dtype=torch.float32).cuda()
+                self.scene_flow_tensor = torch.zeros((height, width, 4), dtype=torch.float32).cuda()
+
 
         def readbuffer_to_tensor(self, modes=AVAILABLE_MODALITIES):
             results = []

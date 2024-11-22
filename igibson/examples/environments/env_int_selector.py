@@ -11,7 +11,7 @@ from igibson.utils.assets_utils import get_available_ig_scenes
 from igibson.utils.utils import let_user_pick
 
 
-def main(selection="user", headless=False, short_exec=False):
+def main(selection="user", headless=True, short_exec=True):
     """
     Prompts the user to select any available interactive scene and loads a turtlebot into it.
     It steps the environment 100 times with random actions sampled from the action space,

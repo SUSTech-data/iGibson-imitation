@@ -10,7 +10,11 @@ from igibson.render.profiler import Profiler
 from igibson.utils.assets_utils import get_scene_path
 
 
-def main(selection="user", headless=False, short_exec=False):
+import av
+
+
+
+def main(selection="user", headless=True, short_exec=True):
     """
     Creates renderer and renders RGB images in Rs (no interactive). No physics.
     The camera view can be controlled.
@@ -26,6 +30,18 @@ def main(selection="user", headless=False, short_exec=False):
 
     # Create renderer object and load the scene model
     renderer = MeshRenderer(width=512, height=512)
+
+    output_filename = 'output.mp4'
+    fps = 30  # Frames per second
+    width = 512
+    height = 512
+    container = av.open(output_filename, mode='w')
+
+    stream = container.add_stream('libx264', rate=fps)
+    stream.width = width
+    stream.height = height
+    stream.pix_fmt = 'yuv420p'
+
     renderer.load_object(model_path)
     renderer.add_instance_group([0])
 
@@ -66,14 +82,26 @@ def main(selection="user", headless=False, short_exec=False):
         cv2.setMouseCallback("Viewer", change_dir)
 
     # Move camera and render
-    max_steps = -1 if not short_exec else 1000
+    max_steps = -1 if not short_exec else 500
     step = 0
     while step != max_steps:
         with Profiler("Render"):
-            frame = renderer.render(modes=("rgb"))
+            [render_res] = renderer.render(modes=("rgb"))   # (H, W, 4)    
+            
+        rgba = (render_res * 255).astype(np.uint8)
+
+        frame = av.VideoFrame.from_ndarray(rgba, format='rgba')
+
+        # Convert the frame to YUV420 for encoding
+        frame_yuv420 = frame.reformat(format='yuv420p')
+
+        # Encode the frame
+        packet = stream.encode(frame_yuv420)
+        if packet:
+            container.mux(packet)
 
         if not headless:
-            cv2.imshow("Viewer", cv2.cvtColor(np.concatenate(frame, axis=1), cv2.COLOR_RGB2BGR))
+            cv2.imshow("Viewer", cv2.cvtColor(np.concatenate(render_res, axis=1), cv2.COLOR_RGB2BGR))
             q = cv2.waitKey(1)
             if q == ord("w"):
                 px += 0.01
@@ -92,6 +120,13 @@ def main(selection="user", headless=False, short_exec=False):
 
     # Cleanup
     renderer.release()
+    packet = stream.encode(None)
+    if packet:
+        container.mux(packet)
+
+    # Close the container
+    container.close()
+    print("Video saved to", output_filename)
 
 
 if __name__ == "__main__":

@@ -89,3 +89,6 @@ coverage.xml
 
 
 **/__pycache__
+**/*.mp4
+**/*.urdf
+**/*.obj
